@@ -25,6 +25,31 @@ This Python script fetches the exchange rate between two currencies using the Ex
 - Ensure Python and the requests library are installed.
 - Call the `get_exchange_rate` function with the required parameters (amount, from_currency, to_currency) to fetch the exchange rate.
 
+## Code
+```python
+def get_exchange_rate(amount, from_currency, to_currency):
+    
+    url = "https://exchangerate-api.p.rapidapi.com/rapid/latest/USD"
+
+    headers = {
+        "X-RapidAPI-Key": "2cb11a79eemsh3e02386a94e7969p129c47jsn2dce33b3a5d7",
+        "X-RapidAPI-Host": "exchangerate-api.p.rapidapi.com"
+    }
+
+    response = requests.get(url, headers=headers)
+    data = response.json()
+    rates = data['rates']
+    converted_to_USD = 1/rates[from_currency]
+    converted_to_req_currency = rates[to_currency] * converted_to_USD
+    
+    total_amount = amount * converted_to_req_currency
+    
+    return total_amount
+
+print(get_exchange_rate(10_000,"HKD","USD"))  # should give roughly 1278
+print(get_exchange_rate(1_000_000,"JPY","HKD"))  # should give roughly 52000    
+```
+
 ## Example
 
 ```python
